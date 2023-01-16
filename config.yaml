@@ -1,0 +1,5 @@
+name: "WLED W2812BStrip"
+packageKey: "WLED.W2812BStrip"
+permissions:
+  lan: {}
+  discovery: {}
