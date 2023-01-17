@@ -27,7 +27,16 @@ local function discovery.discovery_Handler(driver, _, should_continue)
 
 	
 	while should_continue do 
+		--Searching WLED mDNS Space
+		local foundDevices = mDNS.get_services("_wled._tcp.local", function (deviceTable) 
+			--iterate throught found devices
+			for _,value in ipairs(deviceTable.instances) do
+			 --get mac adress
+			 local macAdress = http.sendGetRequestWithJsonResponse("http://" .. value["IP"] .. "/json/info", {})["mac"]
+			 log.debug(macAdress);
+			end
 		
+		end)
 	end
 
 end
