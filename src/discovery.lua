@@ -17,6 +17,8 @@ local function getMacFromController()
 end
 
 function Discovery.discovery_Handler(driver, _, should_continue)
+	log.info("Starting Discovery-------")
+
 	local foundDevices = {}
 	--Get known devices
 	local knownDevices = {}
@@ -31,18 +33,36 @@ function Discovery.discovery_Handler(driver, _, should_continue)
 			local dnsSpace = "_wled._tcp.local"
 		    mDNS.get_services(dnsSpace, function (deviceTable) 
 			--iterate throught found devices
-			log.info("DeviceTable: " .. utils.stringify_table(deviceTable)) -- -->> Contains MAC!!!!! --> Table:  DeviceTable: { ["wled-996ad8.local"] = { ["ip"] = 192.168.178.61,} ,["wled-996ad8._wled._tcp.local"] = { ["info"] = { ["mac"] = e8db84996ad8,} ,["hostnames"] = { [1] = wled-996ad8.local,} ,["port"] = 80,} ,["_wled._tcp.local"] = { ["instances"] = { [1] = wled-996ad8._wled._tcp.local,} ,} ,}
-			for _,deviceName in ipairs(deviceTable[dnsSpace]["instances"]) do
-			 local deviceInfo = {
-				macAdress = deviceTable[deviceName]["info"]["mac"],
-				ipAdress = deviceTable[deviceTable[deviceName]["info"]["hostnames"][1]]["ip"]
-			 }
-			 log.info("DeviceInfo: " .. utils.stringify_table(deviceInfo))
+        	 for _,deviceName in ipairs(deviceTable[dnsSpace]["instances"]) do
+			 --filter device info
+			    local macAdress = deviceTable[deviceName]["info"]["mac"]
+				local networkID = deviceName..":"..macAdress
+				
+				if not knownDevices[networkID] and not foundDevices[networkID] then
+				
+					local metaData = {
+						type = "LAN",
+						device_network_id = networkID,
+						label = "WLED controlled RGB Strip",
+						profile = "W2812BStrip",
+						manufacturer = "Aircookie",
+						model = "WLED",
+					}
+				
+				  --Add Device
+				  log.info("Trying to create Device with: "..utils.stringify_table(metaData))
+				  assert(driver:try_create_device(metaData))
+				  foundDevices[networkID] = true
+				
+			
+				else
+					log.info("Discoverd known Device: "..networkID)
+				end
 			end
 		
 		end)
 	end
-
+	log.info("Stopping Discovery-------")
 end
 
 return Discovery
