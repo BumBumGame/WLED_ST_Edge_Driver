@@ -1,10 +1,10 @@
-local log = require "log"
-local capabilities = require "st.capabilities"
-local Driver = require "st.driver"
-local utils = require "st.utils"
+local log = require("log")
+local capabilities = require("st.capabilities")
+local Driver = require("st.driver")
+local utils = require("st.utils")
 
 --local librarys
-local mDNS = require "mDNS"
+local mDNS = require("mDNS")
 --local imports
 
 

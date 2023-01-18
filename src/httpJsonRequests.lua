@@ -1,4 +1,4 @@
-local cosock = require "cosock"
+local cosock = require("cosock")
 local http = cosock.asyncify "socket.http"
 local ltn12 = require("ltn12")
 local json = require('dkjson')
