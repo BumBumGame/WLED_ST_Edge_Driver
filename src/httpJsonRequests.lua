@@ -5,6 +5,7 @@ local json = require('dkjson')
 local neturl = require("net.url")
 local utils = require("st.utils")
 
+local log = require("log")
 
 local httpFunctions = {}
 
@@ -23,11 +24,11 @@ function httpFunctions.getJsonRequest(url, path, parameters)
     headers={
       ['Content-Type'] = "application/json",
 	  ["Content-Length"] = 0
-    }})
-
+    }
+	})
   -- Handle response
   if code == 200 then
-    return code, json.decode(utils.stringify_table(res_body))
+    return code, json.decode(table.concat(res_body))
   end
   return code, nil
 end
@@ -54,7 +55,7 @@ function httpFunctions.sendJsonPostRequest(url, path, parameters, postValueTable
 
   -- Handle response
   if code == 200 then
-    return code, json.decode(utils.stringify_table(res_body))
+    return code, json.decode(table.concat(res_body))
   end
     return code, nil
 end

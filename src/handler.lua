@@ -1,6 +1,7 @@
 local http = require("httpJsonRequests")
 local log = require("log")
 local capabilities = require("st.capabilities")
+local utils = require("st.utils")
 
 local handler = {}
 
@@ -10,7 +11,34 @@ return "http://"..device:get_field("IP")
 end
 
 function handler.handle_refresh(driver, device, cmd)
-
+	local deviceUrl = get_device_url(device)
+--load state object of device
+	local httpCode, wledState = http.getJsonRequest(deviceUrl, "json/state", {})
+		if httpCode == 200 then
+			--Set device online
+			device:online()
+			--Update device state
+			--brightness:
+			device:emit_event(capabilities.switchLevel.level((utils.round((wledState.bri/255)*100))))
+			--color:
+			--extract primary colour from main Segment
+			local rgb = wledState.seg[wledState.mainseg + 1].col[1]
+			local hue, sat = utils.rgb_to_hsl(rgb[1], rgb[2], rgb[3])
+		
+			device:emit_event(capabilities.colorControl.saturation(sat))
+			device:emit_event(capabilities.colorControl.hue(hue))
+		
+			--On_off:
+			if wledState.on then 
+				device:emit_event(capabilities.switch.switch.on())
+			else
+				device:emit_event(capabilities.switch.switch.off())
+			end
+		else
+			--print error and mark as offline
+			log.warn("Device: "..deviceUrl.. " not responding!")
+			device:offline()
+		end
 end
 
 function handler.handle_on(driver, device, cmd)

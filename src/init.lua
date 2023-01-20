@@ -21,6 +21,9 @@ local wledDriver = Driver("example", {
           [capabilities.switch.commands.on.NAME] = handler.handle_on,
           [capabilities.switch.commands.off.NAME] = handler.handle_off
         },
+		[capabilities.refresh.ID] = {
+		  [capabilities.refresh.commands.refresh.NAME] = handler.handle_refresh
+		}
 		
 	}
 })
