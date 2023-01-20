@@ -25,9 +25,9 @@ function http.getJsonRequest(url, path, parameters)
 
   -- Handle response
   if code == 200 then
-    return json.decode(res_body)
+    return code, json.decode(res_body)
   end
-  return nil
+  return code, nil
 end
 
 --Parameters as Table!
@@ -50,9 +50,9 @@ function http.sendJsonPostRequest(url, path, parameters, postValueTable)
 
   -- Handle response
   if code == 200 then
-    return json.decode(res_body)
+    return code, json.decode(res_body)
   end
-    return nil
+    return code, nil
 end
 
 
