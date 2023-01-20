@@ -9,17 +9,17 @@ local wledDriver = Driver("example", {
 	discovery = discovery.discovery_Handler,
 	lifecycle_handlers = lifecycles,
 	supported_capabilities = {
-        capabilties.switch,
-        capabilties.switchLevel,
-        capabilties.colorControl,
-        capabilties.refresh
+        capabilities.switch,
+        capabilities.switchLevel,
+        capabilities.colorControl,
+        capabilities.refresh
 		},
 	  
 	capability_handlers = {
         -- Switch command handler
-        [capabilties.switch.ID] = {
-          [capabilties.switch.commands.on.NAME] = handler.handle_on,
-          [capabilties.switch.commands.off.NAME] = handler.handle_off
+        [capabilities.switch.ID] = {
+          [capabilities.switch.commands.on.NAME] = handler.handle_on,
+          [capabilities.switch.commands.off.NAME] = handler.handle_off
         },
 		
 	}
