@@ -23,8 +23,10 @@ local wledDriver = Driver("example", {
         },
 		[capabilities.refresh.ID] = {
 		  [capabilities.refresh.commands.refresh.NAME] = handler.handle_refresh
+		},
+		[capabilities.switchLevel.ID] = {
+		  [capabilities.switchLevel.commands.setLevel.NAME] = handler.handle_setLevel
 		}
-		
 	}
 })
 

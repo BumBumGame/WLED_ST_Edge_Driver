@@ -4,6 +4,7 @@ local log = require("log")
 
 local lifecyle_functions = {}
 
+--init
 function lifecyle_functions.init(driver, device)
 --load dns instance name 
 
@@ -23,6 +24,7 @@ mDNS.get_address(instanceName, function (ipAdress, port)
 	end)
 end
 
+--deleted
 function lifecyle_functions.removed(driver, device)
 device:deleted()
 end

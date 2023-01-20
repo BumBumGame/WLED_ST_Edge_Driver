@@ -57,6 +57,26 @@ function handler.handle_off(driver, device, cmd)
 	end
 end
 
+function handler.handle_setLevel(driver, device, cmd)
+	local newBrightness = utils.round(255*(cmd.args.level/100))
+	--turn device on if brightness bigger than 0
+	local on_State = true 
+	if cmd.args.level == 0 then on_State = false 
+	end
+	
+	local httpCode = http.sendJsonPostRequest(get_device_url(device), "json/state", {}, {bri = newBrightness, on = on_State})
+	if httpCode == 200 then
+		--change state
+		device:emit_event(capabilities.switchLevel.level(cmd.args.level))
+		
+		if on_State then
+			device:emit_event(capabilities.switch.switch.on())
+		else
+			device:emit_event(capabilities.switch.switch.off())
+		end
+	end
+end
+
 
 
 return handler
