@@ -84,7 +84,27 @@ end
 function handler.handle_setColor(driver, device, cmd)
 	local r, g, b = utils.hsl_to_rgb(cmd.args.color.hue, cmd.args.color.saturation)
 	
-	log.info("R:"..r.." G:"..g.." B:"..b.."Hue:"..cmd.args.color.hue.."sat"..cmd.args.color.saturation)
+	--get segment-List from Strip
+	local httpCode, sateObject = http.getJsonRequest(get_device_url(device), "json/state", {})
+	if httpCode == 200 then
+		--generate new segment info
+		local newSegmentInfo = {}
+		
+		for key,_ in ipairs(stateObject.seg) do
+			--set primary rgb to colour
+			newSegmentInfo[key].col = {{r,g,b}}
+			--set effect to static
+			newSegmentInfo[key].fx = 0
+		end
+		
+		--send new info to wled
+		local httpCode = sendJsonPostRequest(get_device_url(device), "json/state", {}, newSegmentInfo)
+		if httpCode == 200 then
+			--If succesfull: Emit Events
+			device:emit_event(capabilities.colorControl.saturation(cmd.args.color.saturation))
+			device:emit_event(capabilities.colorControl.hue(cmd.args.color.hue))
+		end
+	end
 end
 
 
