@@ -26,7 +26,7 @@ function handler.handle_refresh(driver, device, cmd)
 			local rgb = wledState.seg[wledState.mainseg + 1].col[1]
 			local hue, sat, lightness = utils.rgb_to_hsl(rgb[1], rgb[2], rgb[3])
 			
-			device:emit_event(capabilities.colorControl.saturation(utils.round(sat*(1-lightness/100))))
+			device:emit_event(capabilities.colorControl.saturation(utils.round(sat*(1-lightness/200))))
 			device:emit_event(capabilities.colorControl.hue(hue))
 		
 			--On_off:
@@ -85,20 +85,17 @@ function handler.handle_setColor(driver, device, cmd)
 	local r, g, b = utils.hsl_to_rgb(cmd.args.color.hue, cmd.args.color.saturation)
 	
 	--get segment-List from Strip
-	local httpCode, sateObject = http.getJsonRequest(get_device_url(device), "json/state", {})
+	local httpCode, stateObject = http.getJsonRequest(get_device_url(device), "json/state", {})
 	if httpCode == 200 then
 		--generate new segment info
-		local newSegmentInfo = {}
-		
+		local newStateInfo = {seg = {}}
 		for key,_ in ipairs(stateObject.seg) do
-			--set primary rgb to colour
-			newSegmentInfo[key].col = {{r,g,b}}
-			--set effect to static
-			newSegmentInfo[key].fx = 0
+			--set primary rgb to colour and every effect to static
+			table.insert(newStateInfo.seg, {col = {{r,g,b}}, fx = 0})
 		end
 		
 		--send new info to wled
-		local httpCode = sendJsonPostRequest(get_device_url(device), "json/state", {}, newSegmentInfo)
+		local httpCode = http.sendJsonPostRequest(get_device_url(device), "json/state", {}, newStateInfo)
 		if httpCode == 200 then
 			--If succesfull: Emit Events
 			device:emit_event(capabilities.colorControl.saturation(cmd.args.color.saturation))
