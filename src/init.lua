@@ -26,6 +26,9 @@ local wledDriver = Driver("example", {
 		},
 		[capabilities.switchLevel.ID] = {
 		  [capabilities.switchLevel.commands.setLevel.NAME] = handler.handle_setLevel
+		},
+		[capabilities.colorControl.ID] = {
+		  [capabilities.colorControl.commands.setColor.NAME] = handler.handle_setColor
 		}
 	}
 })

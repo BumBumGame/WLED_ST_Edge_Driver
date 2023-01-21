@@ -10,6 +10,7 @@ local function get_device_url(device)
 return "http://"..device:get_field("IP")
 end
 
+--refresh
 function handler.handle_refresh(driver, device, cmd)
 	local deviceUrl = get_device_url(device)
 --load state object of device
@@ -23,9 +24,9 @@ function handler.handle_refresh(driver, device, cmd)
 			--color:
 			--extract primary colour from main Segment
 			local rgb = wledState.seg[wledState.mainseg + 1].col[1]
-			local hue, sat = utils.rgb_to_hsl(rgb[1], rgb[2], rgb[3])
-		
-			device:emit_event(capabilities.colorControl.saturation(sat))
+			local hue, sat, lightness = utils.rgb_to_hsl(rgb[1], rgb[2], rgb[3])
+			
+			device:emit_event(capabilities.colorControl.saturation(utils.round(sat*(1-lightness/100))))
 			device:emit_event(capabilities.colorControl.hue(hue))
 		
 			--On_off:
@@ -41,6 +42,7 @@ function handler.handle_refresh(driver, device, cmd)
 		end
 end
 
+--on_off handler
 function handler.handle_on(driver, device, cmd)
 	local httpCode = http.sendJsonPostRequest(get_device_url(device), "json/state", {}, {on = true})
 	if httpCode == 200 then
@@ -57,6 +59,7 @@ function handler.handle_off(driver, device, cmd)
 	end
 end
 
+--set level handler
 function handler.handle_setLevel(driver, device, cmd)
 	local newBrightness = utils.round(255*(cmd.args.level/100))
 	--turn device on if brightness bigger than 0
@@ -77,6 +80,12 @@ function handler.handle_setLevel(driver, device, cmd)
 	end
 end
 
+--Color handler
+function handler.handle_setColor(driver, device, cmd)
+	local r, g, b = utils.hsl_to_rgb(cmd.args.color.hue, cmd.args.color.saturation)
+	
+	log.info("R:"..r.." G:"..g.." B:"..b.."Hue:"..cmd.args.color.hue.."sat"..cmd.args.color.saturation)
+end
 
 
 return handler
