@@ -5,7 +5,7 @@ local discovery = require("discovery")
 local lifecycles = require("lifecycles")
 local handler = require("handler")
 
-local wledDriver = Driver("WLEDDriver", {
+local wledDriver = Driver("wled-rgb", {
 	discovery = discovery.discovery_Handler,
 	lifecycle_handlers = lifecycles,
 	supported_capabilities = {
