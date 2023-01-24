@@ -143,4 +143,9 @@ function commands.wled_get_On_from_State(wledStateObject)
 	return wledStateObject.on
 end
 
+--Returns currentlySet Preset ID (-1 = no preset set)
+function commands.wled_get_currentPreset_from_State(wledStateObject)
+	return wledStateObject.ps
+end
+
 return commands
