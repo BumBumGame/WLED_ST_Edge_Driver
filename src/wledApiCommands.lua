@@ -9,12 +9,27 @@ local commands = {}
 
 
 --local functions
+--creates Device url
 local function get_device_url(device)
 	return "http://"..device:get_field("IP")
 end
 
+--prints a connection warning
 local function printConnectionWarning(device, httpCode)
 	log.warn("Device on '"..get_device_url(device).."' doesn't react! (Code: "..httpCode..")")
+end
+
+--sends post request to WLED state
+local function send_WLED_State_POST_request(device, stateData)
+
+	local httpCode = http.sendJsonPostRequest(get_device_url(device), "json/state", {}, stateData)
+	
+	if httpCode == 200 then
+		return true
+	end
+	--else
+	printConnectionWarning(device, httpCode)
+	return false
 end
 
 
@@ -52,31 +67,17 @@ end
 
 --Turn strip on --------------------------------------------------------------------------------------
 function commands.wled_turn_on(device)
-	local httpCode = http.sendJsonPostRequest(get_device_url(device), "json/state", {}, {on = true})
-	
-	if httpCode == 200 then
-		return true
-	end
-	--else
-	printConnectionWarning(device, httpCode)
-	return false
+	return send_WLED_State_POST_request(device, {on = true})
 end
 
 --Turn strip off --------------------------------------------------------------------------------------
 function commands.wled_turn_off(device)
-	local httpCode = http.sendJsonPostRequest(get_device_url(device), "json/state", {}, {on = false})
-	
-	if httpCode == 200 then
-		return true
-	end
-	--else
-	printConnectionWarning(device, httpCode)
-	return false
+	return send_WLED_State_POST_request(device, {on = false})
 end
 
 --Set Strip level -------------------------------------------------------------------------------------
 -- turns device on if level > 0
---level - value between 0-255
+-- level - value between 0-255
 function commands.wled_set_level(device, level)
 	local on_State = true 
 	
@@ -84,14 +85,7 @@ function commands.wled_set_level(device, level)
 		on_State = false
 	end
 	
-	local httpCode = http.sendJsonPostRequest(get_device_url(device), "json/state", {}, {bri = level, on = on_State})
-	
-	if httpCode == 200 then
-		return true
-	end
-	--else
-	printConnectionWarning(device, httpCode)
-	return false
+	return send_WLED_State_POST_request(device, {bri = level, on = on_State})
 end
 
 --Set Strip color ------------------------------------------------------------------------------------
@@ -114,28 +108,12 @@ function commands.wled_set_color(device, color)
 		table.insert(newColorInfo.seg, {col = {color}, fx = 0})
 	end
 	
-	--send new info to wled
-	local httpCode = http.sendJsonPostRequest(get_device_url(device), "json/state", {}, newColorInfo)
-	
-	if httpCode == 200 then
-		return true
-	end
-	--else:
-	printConnectionWarning(device, httpCode)
-	return false
+	return send_WLED_State_POST_request(device, newColorInfo)
 end
 
 --Set a a wled_Preset---------------------------------------------------------------------------------
 function commands.wled_set_Preset(device, presetID)
-	
-	local httpCode = http.sendJsonPostRequest(get_device_url(), "json/state", {}, {ps = presetID})
-	
-	if httpCode == 200 then
-		return true
-	end
-	--else:
-	printConnectionWarning(device, httpCode)
-	return false
+	return send_WLED_State_POST_request(device, {ps = presetID})
 end
 
 ------------------Strip_Converter-----------
