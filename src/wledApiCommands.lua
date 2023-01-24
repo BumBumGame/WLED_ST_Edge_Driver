@@ -125,6 +125,19 @@ function commands.wled_set_color(device, color)
 	return false
 end
 
+--Set a a wled_Preset---------------------------------------------------------------------------------
+function commands.wled_set_Preset(device, presetID)
+	
+	local httpCode = http.sendJsonPostRequest(get_device_url(), "json/state", {}, {ps = presetID})
+	
+	if httpCode == 200 then
+		return true
+	end
+	--else:
+	printConnectionWarning(device, httpCode)
+	return false
+end
+
 ------------------Strip_Converter-----------
 --Returns brightness level from state object (0-100%)
 function commands.wled_get_Brightness_from_State(wledStateObject)
