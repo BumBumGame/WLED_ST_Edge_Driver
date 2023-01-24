@@ -19,6 +19,7 @@ This Driver adds the ability to find and control RGB-Strips powered by [Aircooki
 3. Click "Accept", to accept the invitation.
 4. Click on "Drivers".
 5. Click "Install" to install the driver on your Hub.
+6. Start "Search for nearby devices" in your Smarthingsapp and wait for it to find all wled devices.
 
 *Alternative: Create your own package from the source code under the release hub and enroll it manually*
 ## Requirements
