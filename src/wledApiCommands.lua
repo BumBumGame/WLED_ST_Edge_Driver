@@ -35,6 +35,21 @@ function commands.wled_get_State(device)
 	return nil
 end
 
+--Get all wled Presets--------------------------------------------------------------------------------
+--returns nil if not succesfull
+function commands.wled_get_Presets(device)
+
+	local httpCode, presetData = http.getJsonRequest(get_device_url(device), "presets.json", {})
+	
+	if httpCode == 200 then
+		return presetData
+	end
+	
+	--else
+	printConnectionWarning(device, httpCode)
+	return nil
+end
+
 --Turn strip on --------------------------------------------------------------------------------------
 function commands.wled_turn_on(device)
 	local httpCode = http.sendJsonPostRequest(get_device_url(device), "json/state", {}, {on = true})
