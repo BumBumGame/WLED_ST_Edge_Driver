@@ -4,6 +4,7 @@ local log = require("log")
 local mDNS = require("mDNS")
 --local imports
 local tools = require("tools")
+local handlers = require("handler")
 
 
 local lifecyle_functions = {}
@@ -25,6 +26,8 @@ function lifecyle_functions.init(driver, device)
 		log.info("Got ip for: ["..instanceName.."] :"..ipAdress)
 		device:online()
 		device:set_field("IP", ipAdress)
+		--refresh device
+		handlers.handle_refresh(driver, device)
 	end)
 	
 	log.info("End init lifecycle...")

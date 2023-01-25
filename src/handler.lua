@@ -10,7 +10,7 @@ local wled_commands = require("wledApiCommands")
 local handler = {}
 
 --refresh_Handler---------------------------------------------------------------------------------------
-function handler.handle_refresh(driver, device, cmd)
+function handler.handle_refresh(driver, device)
 
 	--load state object of device
 	local wledState = wled_commands.wled_get_State(device)
