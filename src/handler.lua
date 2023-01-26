@@ -14,9 +14,11 @@ function handler.handle_refresh(driver, device)
 
 	--load state object of device
 	local wledState = wled_commands.wled_get_State(device)
+	--load current preset list of device
+	local wledPresets = wled_commands.wled_get_Presets(device)
 	
 	--if unsuccessfull set device as offline
-	if wledState == nil then
+	if wledState == nil or wledPresetList == nil then
 		device:offline()
 		return
 	end
@@ -24,22 +26,33 @@ function handler.handle_refresh(driver, device)
 		
 	--Set device online
 	device:online()
-			
-	--Update device state
-	--brightness:
+	
+	--Update device state--------
+	--brightness-----------------:
 	device:emit_event(capabilities.switchLevel.level(wled_commands.wled_get_Brightness_from_State(wledState)))
-			
-	--color:
-	local hue, sat, lightness = wled_commands.wled_get_Color_from_State(wledState)
-			
-	device:emit_event(capabilities.colorControl.saturation(utils.round(sat*(1-lightness/200))))
-	device:emit_event(capabilities.colorControl.hue(hue))
 		
-	--On_off:
+	--On_off---------------------:
 	if wled_commands.wled_get_On_from_State(wledState) then 
 		device:emit_event(capabilities.switch.switch.on())
 	else
 		device:emit_event(capabilities.switch.switch.off())
+	end	
+	
+	--color----------------------:
+	local hue, sat, lightness = wled_commands.wled_get_Color_from_State(wledState)
+			
+	device:emit_event(capabilities.colorControl.saturation(utils.round(sat*(1-lightness/200))))
+	device:emit_event(capabilities.colorControl.hue(hue))
+	
+	--Presets--------------------:
+	device:emit_event(capabilities.mode.supportedModes(wled_commands.wled_get_presetNames_from_PresetTable(wledPresets)))
+	--check current preset
+	if wled_commands.wled_get_currentPresetID_from_State(wledState) == -1 then
+		--Set to none if no preset is selected
+		device:emit_event(capabilities.mode.mode("-"))
+	else
+		--Set to current preset if active
+		device:emit_event(capabilities.mode.mode(wledPresets[wled_commands.wled_get_currentPresetID_from_State(wledState) + 1].n))
 	end
 end
 

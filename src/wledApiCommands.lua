@@ -135,8 +135,19 @@ function commands.wled_get_On_from_State(wledStateObject)
 end
 
 --Returns currentlySet Preset ID (-1 = no preset set)
-function commands.wled_get_currentPreset_from_State(wledStateObject)
+function commands.wled_get_currentPresetID_from_State(wledStateObject)
 	return wledStateObject.ps
+end
+
+--Returns string array with all preset names
+function commands.wled_get_presetNames_from_PresetTable(presetTable)
+	local tmpList = {}
+	
+	for _,value in ipairs(presetTable) do
+		table.insert(tmpList, presetTable.n)
+	end
+	
+	return tmpList
 end
 
 return commands
