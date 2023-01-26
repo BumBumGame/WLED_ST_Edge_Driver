@@ -29,6 +29,9 @@ local wledDriver = Driver("wled-rgb", {
 		},
 		[capabilities.colorControl.ID] = {
 		  [capabilities.colorControl.commands.setColor.NAME] = handler.handle_setColor
+		},
+		[capabilities.mode.ID] = {
+		 [capabilities.mode.commands.setMode.NAME] = handler.handle_mode
 		}
 	}
 })

@@ -86,5 +86,10 @@ function handler.handle_setColor(driver, device, cmd)
 	end
 end
 
+--Mode handler-----------------------------------------------------------------------------------------
+function handler.handle_mode(driver, device, cmd)
+	
+end
+
 
 return handler
