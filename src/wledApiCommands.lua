@@ -3,6 +3,7 @@ local log = require("log")
 local utils = require("st.utils")
 --local imports
 local http = require("httpJsonRequests")
+require ("orderKeys")
 
 
 local commands = {}
@@ -116,7 +117,7 @@ function commands.wled_set_Preset(device, presetID)
 	return send_WLED_State_POST_request(device, {ps = presetID})
 end
 
-------------------Strip_Converter-----------
+------------------Strip_Converter--------------------------------------------------------------------
 --Returns brightness level from state object (0-100%)
 function commands.wled_get_Brightness_from_State(wledStateObject)
 	return utils.round((wledStateObject.bri/255)*100)
@@ -139,12 +140,23 @@ function commands.wled_get_currentPresetID_from_State(wledStateObject)
 	return wledStateObject.ps
 end
 
---Returns string array with all preset names
-function commands.wled_get_presetNames_from_PresetTable(presetTable)
+--Returns string array with all preset names (Ordered!)
+function commands.wled_get_presetNamesfrom_PresetTable(presetTable)
 	local tmpList = {}
 	
-	for _,value in ipairs(presetTable) do
-		table.insert(tmpList, presetTable.n)
+	for _,value in orderedPairs(presetTable) do
+		table.insert(tmpList, value.n)
+	end
+	
+	return tmpList
+end
+
+--Returns array with list of list[name] = id
+function commands.wled_get_presetNamesWithID_from_PresetTable(presetTable)
+	local tmpList = {}
+	
+	for key,value in pairs(presetTable) do
+		tmpList[value.n] = key
 	end
 	
 	return tmpList
