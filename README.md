@@ -7,10 +7,10 @@ This Driver adds the ability to find and control RGB-Strips powered by [Aircooki
 - [x] Smartthings Refresh functionality (Drag down to update Device-State)
 - [x] Scan detection via mDns
 - [x] Online/Offline marking
+- [x] Dynamic Loading and starting of Device-Presets
 ## Planned Features
-- [ ] Dynamic Loading and starting of Device-Presets
 - [ ] Auto refreshing of WLED Device-State (With UDP-Broadcast or sheduled checks)
-- [ ] Set Custom Transition for State-Changes in Smarthings
+- [ ] Set Custom Transition for State-Changes in Smartthings
 - [ ] Check WLED Version and only add supported devices
 ## Installation
 1. Click on the invitation link to my WLED_Driver_Release-Channel:
