@@ -3,7 +3,7 @@ local log = require("log")
 local utils = require("st.utils")
 --local imports
 local http = require("httpJsonRequests")
-require ("orderKeys")
+require ("orderedKeys")
 
 
 local commands = {}
@@ -58,6 +58,7 @@ function commands.wled_get_Presets(device)
 	local httpCode, presetData = http.getJsonRequest(get_device_url(device), "presets.json", {})
 	
 	if httpCode == 200 then
+		--remove empty element from table
 		return presetData
 	end
 	
@@ -145,18 +146,49 @@ function commands.wled_get_presetNamesfrom_PresetTable(presetTable)
 	local tmpList = {}
 	
 	for _,value in orderedPairs(presetTable) do
-		table.insert(tmpList, value.n)
+	
+		--skip if value is empty
+		if next(value) then 
+			table.insert(tmpList, value.n)
+		end
+		
 	end
 	
 	return tmpList
 end
 
+--Returns string array with all preset names (Ordered!) and the searched for name (nil if not found)
+function commands.wled_get_presetNamesfrom_PresetTable_and_searchName(presetTable, presetID)
+	local tmpList = {}
+	local tmpPresetName = nil
+	
+	for key,value in orderedPairs(presetTable) do
+	
+		--skip if value is empty
+		if next(value) then 
+			table.insert(tmpList, value.n)
+
+			if tostring(key) == tostring(presetID) then
+				tmpPresetName = value.n
+			end
+		end
+		
+	end
+	
+	return tmpList, tmpPresetName
+end
+
 --Returns array with list of list[name] = id
 function commands.wled_get_presetNamesWithID_from_PresetTable(presetTable)
 	local tmpList = {}
-	
+
 	for key,value in pairs(presetTable) do
-		tmpList[value.n] = key
+	
+		--only execute if value is not empty
+		if next(value) then 
+			tmpList[value.n] = key
+		end
+
 	end
 	
 	return tmpList

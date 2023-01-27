@@ -18,7 +18,7 @@ function handler.handle_refresh(driver, device)
 	local wledPresets = wled_commands.wled_get_Presets(device)
 	
 	--if unsuccessfull set device as offline
-	if wledState == nil or wledPresetList == nil then
+	if wledState == nil or wledPresets == nil then
 		device:offline()
 		return
 	end
@@ -45,14 +45,17 @@ function handler.handle_refresh(driver, device)
 	device:emit_event(capabilities.colorControl.hue(hue))
 	
 	--Presets--------------------:
-	device:emit_event(capabilities.mode.supportedModes(wled_commands.wled_get_presetNames_from_PresetTable(wledPresets)))
+	local presetList, currentPresetName = wled_commands.wled_get_presetNamesfrom_PresetTable_and_searchName(wledPresets, wled_commands.wled_get_currentPresetID_from_State(wledState))
+	
+	device:emit_event(capabilities.mode.supportedModes(presetList))
+	
 	--check current preset
-	if wled_commands.wled_get_currentPresetID_from_State(wledState) == -1 then
+	if currentPresetName == nil then
 		--Set to none if no preset is selected
 		device:emit_event(capabilities.mode.mode("-"))
 	else
 		--Set to current preset if active
-		device:emit_event(capabilities.mode.mode(wledPresets[wled_commands.wled_get_currentPresetID_from_State(wledState) + 1].n))
+		device:emit_event(capabilities.mode.mode(currentPresetName))
 	end
 end
 
@@ -113,7 +116,7 @@ function handler.handle_mode(driver, device, cmd)
 	local presetIds = wled_commands.wled_get_presetNamesWithID_from_PresetTable(currentPresetState)
 	
 	--check if presetName has an id
-	if presetIds[cmd.args.mode] == nil
+	if presetIds[cmd.args.mode] == nil then
 		--if not skip and goto refresh
 		goto refresh
 	end
