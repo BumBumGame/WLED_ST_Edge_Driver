@@ -7,6 +7,15 @@ local function __genOrderedIndex( t )
     return orderedIndex
 end
 
+local function _getTableSize(t)
+    local count = 0
+    for _, __ in pairs(t) do
+        count = count + 1
+    end
+    return count
+end
+
+
 local function orderedNext(t, state)
     -- Equivalent of the next function, but returns the keys in the alphabetic
     -- order. We use a temporary ordered key table that is stored in the
@@ -20,7 +29,7 @@ local function orderedNext(t, state)
         key = t.__orderedIndex[1]
     else
         -- fetch the next value
-        for i = 1,table.getn(t.__orderedIndex) do
+        for i = 1,_getTableSize(t.__orderedIndex) do
             if t.__orderedIndex[i] == state then
                 key = t.__orderedIndex[i+1]
             end
