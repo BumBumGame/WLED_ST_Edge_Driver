@@ -48,7 +48,7 @@ end
 -- path (String) - Path after url
 -- parameters (Table) - Get Parameters for url
 -- postValueTable (Table) - Post parameters for request
---return: Http-Status-Code, decodedJsonResponse (if received)
+-- return: Http-Status-Code, decodedJsonResponse (if received)
 function httpFunctions.sendJsonPostRequest(url, path, parameters, postValueTable)
 	local dest_url = url..'/'..path
 	local query = neturl.buildQuery(parameters or {})
@@ -77,6 +77,22 @@ function httpFunctions.sendJsonPostRequest(url, path, parameters, postValueTable
 	
     return code, nil
 end
+
+--Uses http-Get to request data from url
+-- url (String) - Devcice url (eg. "http://xxx.xxx.xxx")
+-- return: Boolean, Whether device reponded or not
+function httpFunctions.getDeviceOnlineStatus(url){
+	local _, code = http.request({
+		method="GET",
+		url=url
+	})
+	
+	if code == 200 then
+		return true;
+	end
+	
+	return false
+}
 
 
 return httpFunctions
