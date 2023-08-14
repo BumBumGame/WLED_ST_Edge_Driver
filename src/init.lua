@@ -12,7 +12,8 @@ local wledDriver = Driver("wled-rgb", {
         capabilities.switch,
         capabilities.switchLevel,
         capabilities.colorControl,
-        capabilities.refresh
+        capabilities.refresh,
+		capabilities.scenes
 		},
 	  
 	capability_handlers = {
@@ -30,8 +31,11 @@ local wledDriver = Driver("wled-rgb", {
 		[capabilities.colorControl.ID] = {
 		  [capabilities.colorControl.commands.setColor.NAME] = handler.handle_setColor
 		},
-		[capabilities.mode.ID] = {
-		 [capabilities.mode.commands.setMode.NAME] = handler.handle_mode
+		--[capabilities.mode.ID] = {
+		 --[capabilities.mode.commands.setMode.NAME] = handler.handle_mode
+		--}
+		[capabilities.scenes.ID] = {
+		 [capabilities.scenes.commands.setScene.NAME] = handler.handle_scenes
 		}
 	}
 })

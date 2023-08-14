@@ -81,7 +81,7 @@ end
 --Uses http-Get to request data from url
 -- url (String) - Devcice url (eg. "http://xxx.xxx.xxx")
 -- return: Boolean, Whether device reponded or not
-function httpFunctions.getDeviceOnlineStatus(url){
+function httpFunctions.getDeviceOnlineStatus(url)
 	local _, code = http.request({
 		method="GET",
 		url=url
@@ -92,7 +92,7 @@ function httpFunctions.getDeviceOnlineStatus(url){
 	end
 	
 	return false
-}
+end
 
 
 return httpFunctions
