@@ -47,15 +47,15 @@ function handler.handle_refresh(driver, device)
 	--Presets--------------------:
 	local presetList, currentPresetName = wled_commands.wled_get_presetNamesfrom_PresetTable_and_searchName(wledPresets, wled_commands.wled_get_currentPresetID_from_State(wledState))
 	
-	device:emit_event(capabilities.mode.supportedModes(presetList))
+	device:emit_event(capabilities.scenes.supportedScenes(presetList))
 	
 	--check current preset
 	if currentPresetName == nil then
 		--Set to none if no preset is selected
-		device:emit_event(capabilities.mode.mode("-"))
+		device:emit_event(capabilities.scenes.scene("-"))
 	else
 		--Set to current preset if active
-		device:emit_event(capabilities.mode.mode(currentPresetName))
+		device:emit_event(capabilities.scenes.scene(currentPresetName))
 	end
 end
 
@@ -131,6 +131,36 @@ function handler.handle_mode(driver, device, cmd)
 	::refresh::
 	handler.handle_refresh(driver, device)
 end
-
+---------------------------------------------------------------------------------------------------------------
+----Scene Preset Handler--------------
+function handler.handle_scenes()
+		--get current available presets
+	local currentPresetState = wled_commands.wled_get_Presets(device)
+	
+	if currentPresetState == nil then
+		--leave if failed
+		return
+	end
+	
+	--extract ID list
+	local presetIds = wled_commands.wled_get_presetNamesWithID_from_PresetTable(currentPresetState)
+	
+	--check if presetName has an id
+	if presetIds[cmd.args.scene] == nil then
+		--if not skip and goto refresh
+		goto refresh
+	end
+	
+	--send presetTo device
+	if not wled_commands.wled_set_Preset(device, presetIds[cmd.args.scene]) then 
+		--end
+		return
+	end
+	
+	--refresh device after setting preset
+	::refresh::
+	handler.handle_refresh(driver, device)
+end
+---------------------------------
 
 return handler
