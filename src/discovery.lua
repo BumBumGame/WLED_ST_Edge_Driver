@@ -5,8 +5,6 @@ local utils = require("st.utils")
 local log = require("log")
 local socket = require("socket")
 
---local librarys
-local mDNS = require("mDNS")
 --local imports
 local config = require("config")
 
