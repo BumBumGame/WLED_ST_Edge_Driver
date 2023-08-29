@@ -5,6 +5,7 @@ local utils = require("st.utils")
 
 --local imports
 local wled_commands = require("wledApiCommands")
+local presetCapability = capabilities["wonderconnect56004.presets"]
 
 
 local handler = {}
@@ -47,15 +48,15 @@ function handler.handle_refresh(driver, device)
 	--Presets--------------------:
 	local presetList, currentPresetName = wled_commands.wled_get_presetNamesfrom_PresetTable_and_searchName(wledPresets, wled_commands.wled_get_currentPresetID_from_State(wledState))
 	
-	device:emit_event(capabilities.scenes.supportedScenes(presetList))
+	device:emit_event(presetCapability.installedPresets(presetList))
 	
 	--check current preset
 	if currentPresetName == nil then
 		--Set to none if no preset is selected
-		device:emit_event(capabilities.scenes.scene("-"))
+		device:emit_event(presetCapability.activePreset("-"))
 	else
 		--Set to current preset if active
-		device:emit_event(capabilities.scenes.scene(currentPresetName))
+		device:emit_event(presetCapability.activePreset(currentPresetName))
 	end
 end
 
@@ -146,13 +147,13 @@ function handler.handle_scenes()
 	local presetIds = wled_commands.wled_get_presetNamesWithID_from_PresetTable(currentPresetState)
 	
 	--check if presetName has an id
-	if presetIds[cmd.args.scene] == nil then
+	if presetIds[cmd.args.preset] == nil then
 		--if not skip and goto refresh
 		goto refresh
 	end
 	
 	--send presetTo device
-	if not wled_commands.wled_set_Preset(device, presetIds[cmd.args.scene]) then 
+	if not wled_commands.wled_set_Preset(device, presetIds[cmd.args.preset]) then 
 		--end
 		return
 	end

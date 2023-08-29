@@ -1,0 +1,51 @@
+{
+  "name": "presets",
+  "attributes": {
+        "activePreset": {
+            "schema": {
+                "type": "object",
+                "properties": {
+                    "value": {
+                        "type": "string"
+                    }
+                },
+                "additionalProperties": false,
+                "required": [
+                    "value"
+                ]
+            },
+            "setter": "setPreset"
+        },
+        "installedPresets": {
+            "schema": {
+                "type": "object",
+                "properties": {
+                    "value": {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        }
+                    }
+                },
+                "additionalProperties": false,
+                "required": [
+                    "value"
+                ]
+            }
+        }
+    },
+    "commands": {
+        "setPreset": {
+            "name": "setPreset",
+            "arguments": [
+                {
+                    "name": "preset",
+                    "schema": {
+                        "type": "string"
+                    },
+                    "optional": false
+                }
+            ]
+        }
+    }
+}

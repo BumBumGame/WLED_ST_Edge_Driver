@@ -1,0 +1,52 @@
+{
+  "detailView": [
+	{
+		"label": "Presets",
+		"displayType": "list",
+		"list": {
+		"command": {
+			"name": "setPreset",
+			"alternatives": [
+				{
+					"key": "-",
+					"value": "-",
+					"type": "inactive"
+				}
+			]
+		},
+		"state": {
+			"value": "activePreset.value",
+			"valueType": "string",
+			"alternatives": [
+				{
+					"key": "-",
+					"value": "-",
+					"type": "inactive"
+				}
+			]
+		}
+	  },
+	  "state": null,
+	}
+  ],
+  "automation": {
+    "actions": [
+      {
+        "label": "Presets",
+        "displayType": "list",
+        "list": {
+		  "command": "setPreset",
+		  "alternatives": [
+			{
+				"key": "-",
+				"value": "-",
+				"type": "inactive"
+			}
+		  ]
+        }
+      }
+    ]
+  },
+  "id": "wonderconnect56004.presets",
+  "version": 1
+}
