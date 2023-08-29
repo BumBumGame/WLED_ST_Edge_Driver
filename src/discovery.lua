@@ -4,7 +4,7 @@ local Driver = require("st.driver")
 local utils = require("st.utils")
 local net_utils = require("st.net_utils")
 local log = require("log")
-local socket = require("socket")
+local socket = require("cosock.socket")
 local mDNS = require("st.mdns")
 
 --local imports
