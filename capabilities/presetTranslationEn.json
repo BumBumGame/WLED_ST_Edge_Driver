@@ -1,0 +1,14 @@
+{
+  "tag": "en",
+  "label": "Presets",
+  "attributes": {
+    "activePreset": {
+      "label": "Active Preset",
+      "displayTemplate": "{{attribute}} of {{device.label}} is {{value}}",
+      "i18n": {
+        "value": {
+        }
+      }
+    }
+  }
+}
