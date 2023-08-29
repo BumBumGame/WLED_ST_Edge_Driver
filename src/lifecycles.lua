@@ -1,6 +1,7 @@
 --St-imports
 local log = require("log")
 local mDNS = require("st.mdns")
+local net_utils = require("st.net_utils")
 
 --local imports
 local tools = require("tools")
@@ -18,11 +19,11 @@ function lifecyle_functions.init(driver, device)
 	--Resolve device IP Adress
 	local resolvedData = mDNS.resolve(mdnsData[1], mdnsData[2], "local") or {}
 	--Process resolvedData (Take first IPv4 Adress found, else will be ignored)
-	for nil,found in ipairs(resolvedData) do
+	for _,found in pairs(resolvedData) do
 		--If Valid adress is found: Save to transient Storage and Mark device as online
-		if found ~= nil and net_utils.validate_ipv4_string(found.address) then 
-			log.info("Got IP for ["..mdnsData[1].."] : "..found.adress)
-			device:set_field("IP", found.adress)
+		if net_utils.validate_ipv4_string(found.address) then 
+			log.info("Got IP for ["..mdnsData[1].."] : "..found.address)
+			device:set_field("IP", found.address)
 			device:online()
 			--Refresh device to get init all Values
 			handlers.handle_refresh(driver, device)
