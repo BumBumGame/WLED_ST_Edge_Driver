@@ -1,52 +1,78 @@
 {
-  "detailView": [
-	{
-		"label": "Presets",
-		"displayType": "list",
-		"list": {
-		"command": {
-			"name": "setPreset",
-			"alternatives": [
-				{
-					"key": "-",
-					"value": "-",
-					"type": "inactive"
+	"dashboard": {
+		"states": [
+			"label": "{{currentPreset.value}}"
+		],
+		"actions": [],
+		"panelItems": []
+	},
+	"detailView": [
+		{
+			"label": "Preset",
+			"displayType": "list",
+			"list": {
+				"command": {
+					"name": "setPreset",
+					"alternatives": [
+						{
+							"key": "examplePreset",
+							"value": "Preset Value",
+							"type": "active"
+						}
+					],
+					"supportedValues": "supportedPresets.value"
+				},
+				"state": {
+					"value": "currentPreset.value",
+					"valueType": "string",
+					"alternatives": [
+						{
+							"key": "examplePreset",
+							"value": "Preset Value",
+							"type": "active"
+						}
+					]
 				}
-			]
-		},
-		"state": {
-			"value": "activePreset.value",
-			"valueType": "string",
-			"alternatives": [
-				{
-					"key": "-",
-					"value": "-",
-					"type": "inactive"
-				}
-			]
-		}
-	  },
-	  "state": null,
-	}
-  ],
-  "automation": {
-    "actions": [
-      {
-        "label": "Presets",
-        "displayType": "list",
-        "list": {
-		  "command": "setPreset",
-		  "alternatives": [
-			{
-				"key": "-",
-				"value": "-",
-				"type": "inactive"
 			}
-		  ]
-        }
-      }
-    ]
-  },
-  "id": "wonderconnect56004.presets",
-  "version": 1
+		}
+	],
+	"automation": {
+		"conditions": [
+			{
+				"label": "Preset",
+				"displayType": "list",
+				"list": {
+					"alternatives": [
+						{
+							"key": "examplePreset",
+							"value": "Preset Value",
+							"type": "active"
+						}
+					],
+					"supportedPresets": "supportedPresets.value",
+					"value": "currentPreset.value",
+					"multiSelectable": false
+				}
+			}
+		],
+		"actions": [
+			{
+				"label": "Preset setzen",
+				"displayType": "list",
+				"list": {
+					"alternatives": [
+						{
+							"key": "examplePreset",
+							"value": "Preset Value",
+							"type": "active"
+						}
+					],
+					"supportedValues": "supportedPresets.value",
+					"command": "setPreset"
+				}
+			}
+		]
+	},
+	"id": "wonderconnect56004.preset",
+	"version": 1
 }
