@@ -5,18 +5,11 @@ local discovery = require("discovery")
 local lifecycles = require("lifecycles")
 local handler = require("handler")
 
-local presetCapability = capabilities["wonderconnect56004.presets"]
+local presetCapability = capabilities["wonderconnect56004.preset"]
 
 local wledDriver = Driver("wled-rgb", {
 	discovery = discovery.discovery_Handler,
 	lifecycle_handlers = lifecycles,
-	supported_capabilities = {
-        capabilities.switch,
-        capabilities.switchLevel,
-        capabilities.colorControl,
-        capabilities.refresh,
-		presetCapability
-		},
 	  
 	capability_handlers = {
         -- Switch command handler
@@ -37,7 +30,7 @@ local wledDriver = Driver("wled-rgb", {
 		 --[capabilities.mode.commands.setMode.NAME] = handler.handle_mode
 		--}
 		[presetCapability.ID] = {
-		 [presetCapability.commands.setPreset.NAME] = handler.handle_scenes
+		  [presetCapability.commands.setPreset.NAME] = handler.handle_scenes
 		}
 	}
 })

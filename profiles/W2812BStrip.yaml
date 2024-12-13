@@ -10,7 +10,7 @@ components:
     version: 1
   - id: refresh
     version: 1
-  - id: wonderconnect56004.presets
+  - id: wonderconnect56004.preset
     version: 1
   categories:
   - name: Light

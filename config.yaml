@@ -1,5 +1,6 @@
 name: "WLED W2812BStrip"
 packageKey: "WLED.W2812BStrip"
+description: "A Driver to Support W2812B ARGB Strips via a WLED Controller"
 permissions:
   lan: {}
   discovery: {}
