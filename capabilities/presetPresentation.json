@@ -51,7 +51,7 @@
 							"type": "active"
 						}
 					],
-					"supportedPresets": "supportedPresets.value",
+     "supportedValues": "supportedPresets.value",
 					"value": "currentPreset.value",
 					"multiSelectable": false
 				}
@@ -69,7 +69,7 @@
 							"type": "active"
 						}
 					],
-					"supportedValues": "supportedPresets.value",
+				"supportedValues": "supportedPresets.value",
 					"command": "setPreset"
 				}
 			}
