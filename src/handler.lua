@@ -100,38 +100,11 @@ function handler.handle_setColor(driver, device, cmd)
 		--If succesfull: Emit Events
 		device:emit_event(capabilities.colorControl.saturation(cmd.args.color.saturation))
 		device:emit_event(capabilities.colorControl.hue(cmd.args.color.hue))
+		--Emit disabled Preset
+		device:emit_event(presetCapability.currentPreset("-"))
 	end
 end
 
---Mode(Preset) handler-----------------------------------------------------------------------------------------
-function handler.handle_mode(driver, device, cmd)
-	--get current available presets
-	local currentPresetState = wled_commands.wled_get_Presets(device)
-	
-	if currentPresetState == nil then
-		--leave if failed
-		return
-	end
-	
-	--extract ID list
-	local presetIds = wled_commands.wled_get_presetNamesWithID_from_PresetTable(currentPresetState)
-	
-	--check if presetName has an id
-	if presetIds[cmd.args.mode] == nil then
-		--if not skip and goto refresh
-		goto refresh
-	end
-	
-	--send presetTo device
-	if not wled_commands.wled_set_Preset(device, presetIds[cmd.args.mode]) then 
-		--end
-		return
-	end
-	
-	--refresh device after setting preset
-	::refresh::
-	handler.handle_refresh(driver, device)
-end
 ---------------------------------------------------------------------------------------------------------------
 ----Scene Preset Handler--------------
 function handler.handle_scenes(driver, device, cmd)
