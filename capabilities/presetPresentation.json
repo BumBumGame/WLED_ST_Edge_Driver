@@ -1,7 +1,9 @@
 {
 	"dashboard": {
 		"states": [
-			"label": "{{currentPreset.value}}"
+			{
+				"label": "{{currentPreset.value}}"
+			}
 		],
 		"actions": [],
 		"panelItems": []
